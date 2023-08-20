@@ -10,3 +10,5 @@ What's wrong
 - code coupling - db should be separated of controller 
 - soc of models, to own folders
 - db should not be called within controller - use of repository pattern to abstract db calls
+
+- creating jobs from more file types -- creation of common interface

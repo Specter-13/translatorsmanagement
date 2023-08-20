@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TranslationManagement.DAL;
+using TranslationManagement.DAL.Enums;
 using TranslationManagement.DAL.Models;
+using TranslationManagement.DAL.Repositories;
 
 namespace TranslationManagement.Api.Controlers
 {
@@ -16,47 +18,55 @@ namespace TranslationManagement.Api.Controlers
         public static readonly string[] TranslatorStatuses = { "Applicant", "Certified", "Deleted" };
 
         private readonly ILogger<TranslatorManagementController> _logger;
-        private AppDbContext _context;
+        private readonly TranslatorRepository _translatorRepository;
 
-        public TranslatorManagementController(IServiceScopeFactory scopeFactory, ILogger<TranslatorManagementController> logger)
+        public TranslatorManagementController(TranslatorRepository translatorRepository, ILogger<TranslatorManagementController> logger)
         {
-            _context = scopeFactory.CreateScope().ServiceProvider.GetService<AppDbContext>();
+            _translatorRepository = translatorRepository;
             _logger = logger;
         }
 
         [HttpGet]
-        public Translator[] GetTranslators()
+        public IActionResult GetTranslators()
         {
-            return _context.Translators.ToArray();
+            return Ok(_translatorRepository.GetTranslators());
         }
 
         [HttpGet]
-        public Translator[] GetTranslatorsByName(string name)
+        public IActionResult GetTranslatorsByName(string name)
         {
-            return _context.Translators.Where(t => t.Name == name).ToArray();
+            return Ok(_translatorRepository.GetTranslatorsByName(name));
         }
 
         [HttpPost]
-        public bool AddTranslator(Translator translator)
+        public IActionResult AddTranslator(Translator translator)
         {
-            _context.Translators.Add(translator);
-            return _context.SaveChanges() > 0;
-        }
-        
-        [HttpPost]
-        public string UpdateTranslatorStatus(int Translator, string newStatus = "")
-        {
-            _logger.LogInformation("User status update request: " + newStatus + " for user " + Translator.ToString());
-            if (TranslatorStatuses.Where(status => status == newStatus).Count() == 0)
+            var addedTranslator = _translatorRepository.AddTranslator(translator);
+            if(addedTranslator == null) 
             {
-                throw new ArgumentException("unknown status");
+                return BadRequest();
             }
 
-            var job = _context.Translators.Single(j => j.Id == Translator);
-            job.Status = newStatus;
-            _context.SaveChanges();
+            return Ok(addedTranslator);
+        }
+        
+        [HttpPut]
+        public IActionResult UpdateTranslatorStatus(int id, TranslatorStatus status)
+        {
+            _logger.LogInformation("User status update request: " + status + " for user " + id.ToString());
 
-            return "updated";
+
+            var job = _translatorRepository.GetById(id);
+            if(job == null) 
+            {
+                return BadRequest();
+            }
+
+            job.Status = status;
+
+            _translatorRepository.UpdateTranslator(job);
+
+            return Ok(job);
         }
     }
 }
