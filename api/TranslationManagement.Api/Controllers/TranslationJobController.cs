@@ -10,7 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TranslationManagement.Api.Controlers;
 using TranslationManagement.DAL;
+using TranslationManagement.DAL.Enums;
 using TranslationManagement.DAL.Models;
+using TranslationManagement.DAL.Repositories;
 
 namespace TranslationManagement.Api.Controllers
 {
@@ -28,10 +30,10 @@ namespace TranslationManagement.Api.Controllers
 
         private AppDbContext _context;
         private readonly ILogger<TranslatorManagementController> _logger;
-
-        public TranslationJobController(IServiceScopeFactory scopeFactory, ILogger<TranslatorManagementController> logger)
+        private readonly TranslationJobRepository _translationJobRepository;
+        public TranslationJobController(TranslationJobRepository translationJobRepository, ILogger<TranslatorManagementController> logger)
         {
-            _context = scopeFactory.CreateScope().ServiceProvider.GetService<AppDbContext>();
+            _translationJobRepository = translationJobRepository;
             _logger = logger;
         }
 
@@ -50,7 +52,7 @@ namespace TranslationManagement.Api.Controllers
         [HttpPost]
         public bool CreateJob(TranslationJob job)
         {
-            job.Status = "New";
+            job.Status = JobStatus.New;
             SetPrice(job);
             _context.TranslationJobs.Add(job);
             bool success = _context.SaveChanges() > 0;
@@ -101,26 +103,44 @@ namespace TranslationManagement.Api.Controllers
         }
 
         [HttpPost]
-        public string UpdateJobStatus(int jobId, int translatorId, string newStatus = "")
+        public IActionResult UpdateJobStatus(int jobId, int translatorId, JobStatus newStatus)
         {
             _logger.LogInformation("Job status update request received: " + newStatus + " for job " + jobId.ToString() + " by translator " + translatorId);
-            if (typeof(JobStatuses).GetProperties().Count(prop => prop.Name == newStatus) == 0)
+
+            // check for invalid input
+            //if (typeof(JobStatuses).GetProperties().Count(prop => prop.Name == newStatus) == 0)
+            //{
+            //    return "invalid status";
+            //}
+
+            // if input enum is not defined, return bad request
+            if(!Enum.IsDefined(typeof(JobStatus), newStatus))
             {
-                return "invalid status";
+                return BadRequest("Undefined status");
             }
 
-            var job = _context.TranslationJobs.Single(j => j.Id == jobId);
+            var job = _translationJobRepository.GetById(jobId);
+            if(job == null) 
+            {
+                return NotFound("Job does not exist");
+            }
 
-            bool isInvalidStatusChange = (job.Status == JobStatuses.New && newStatus == JobStatuses.Completed) ||
-                                         job.Status == JobStatuses.Completed || newStatus == JobStatuses.New;
+            bool isInvalidStatusChange = CheckForStatusValidity(job.Status, newStatus);
             if (isInvalidStatusChange)
             {
-                return "invalid status change";
+                return BadRequest("Invalid status change");
             }
 
             job.Status = newStatus;
             _context.SaveChanges();
-            return "updated";
+            return Ok();
         }
+
+
+
+        private bool CheckForStatusValidity(JobStatus oldStatus, JobStatus newStatus) =>
+            (oldStatus == JobStatus.New && newStatus == JobStatus.Completed) ||
+                oldStatus == JobStatus.Completed || newStatus == JobStatus.New;
+
     }
 }

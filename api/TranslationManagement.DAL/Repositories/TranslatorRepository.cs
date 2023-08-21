@@ -39,14 +39,14 @@ namespace TranslationManagement.DAL.Repositories
 
         public Translator AddTranslator(Translator translator)
         {
-            if (translator != null)
-            {
-                var returnedTranslator = _appDbContext.Translators.FirstOrDefault(x => x.Name == translator.Name);
-                if (returnedTranslator != null)
-                {
-                    return null;
-                }
-            }
+            //if (translator != null)
+            //{
+            //    var returnedTranslator = _appDbContext.Translators.FirstOrDefault(x => x.Name == translator.Name);
+            //    if (returnedTranslator != null)
+            //    {
+            //        return null;
+            //    }
+            //}
 
             _appDbContext.Translators.Add(translator);
             _appDbContext.SaveChanges();
