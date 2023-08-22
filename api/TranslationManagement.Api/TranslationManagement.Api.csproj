@@ -23,4 +23,8 @@
     <ProjectReference Include="..\TranslationManagement.DAL\TranslationManagement.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

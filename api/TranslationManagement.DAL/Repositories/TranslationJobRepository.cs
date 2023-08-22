@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TranslationManagement.DAL.Enums;
+using TranslationManagement.DAL.Helpers;
 using TranslationManagement.DAL.Models;
 
 namespace TranslationManagement.DAL.Repositories
@@ -21,7 +22,7 @@ namespace TranslationManagement.DAL.Repositories
 
         }
 
-        public IList<TranslationJob> GetTranslators()
+        public IList<TranslationJob> GetJobs()
         {
             return _appDbContext.TranslationJobs.ToList();
         }
@@ -41,8 +42,17 @@ namespace TranslationManagement.DAL.Repositories
             //        return null;
             //    }
             //}
+            JobHelper.SetPrice(job);
             job.Status = JobStatus.New;
             _appDbContext.TranslationJobs.Add(job);
+            _appDbContext.SaveChanges();
+            return job;
+        }
+
+        public TranslationJob Update(TranslationJob job)
+        {
+
+            _appDbContext.TranslationJobs.Update(job);
             _appDbContext.SaveChanges();
             return job;
         }
