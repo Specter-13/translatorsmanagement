@@ -34,14 +34,6 @@ namespace TranslationManagement.DAL.Repositories
 
         public TranslationJob Create(TranslationJob job)
         {
-            //if (job != null)
-            //{
-            //    var returnedTranslator = _appDbContext.Translators.FirstOrDefault(x => x.Name == translator.Name);
-            //    if (returnedTranslator != null)
-            //    {
-            //        return null;
-            //    }
-            //}
             JobHelper.SetPrice(job);
             job.Status = JobStatus.New;
             _appDbContext.TranslationJobs.Add(job);
@@ -51,10 +43,17 @@ namespace TranslationManagement.DAL.Repositories
 
         public TranslationJob Update(TranslationJob job)
         {
-
             _appDbContext.TranslationJobs.Update(job);
             _appDbContext.SaveChanges();
             return job;
+        }
+
+        public void Delete(int id)
+        {
+
+            var entity = _appDbContext.TranslationJobs.First(t => t.Id == id);
+            _appDbContext.Remove(entity);
+            _appDbContext.SaveChanges();
         }
     }
 }

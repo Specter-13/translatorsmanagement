@@ -71,7 +71,7 @@ namespace TranslationManagement.Api.Controllers
             return Ok(createdJob);
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult UpdateJobStatus(int jobId, int translatorId, JobStatus newStatus)
         {
             _logger.LogInformation("Job status update request received: " + newStatus + " for job " + jobId.ToString() + " by translator " + translatorId);
