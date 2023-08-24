@@ -59,7 +59,7 @@ Simple API with simple Blazor webassembly frontend
 - data validations should be introduced
 
 
-A lot of stuff can be still improved, but now it should be much better than at beggining.
+A lot of stuff can be still improved, but now it should be much better than at beginning.
 
 # notes
 
