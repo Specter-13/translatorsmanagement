@@ -1,0 +1,63 @@
+﻿@using TranslationManagement.Client;
+@inject TranslatorManagementFacade _facade
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Create translator
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <EditForm Model="Model" OnSubmit="@Submit">
+                <div class="modal-body form-group">
+
+                    <label>Name</label>
+                    <InputText @bind-Value="Model!.Name" class="form-control" />
+
+                    <label>Status</label>
+                    <InputSelect @bind-Value="Model.Status" class="form-control">
+
+                        @foreach (var status in Enum.GetValues(typeof(TranslatorStatus)))
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
+                    <label>Hourly rate</label>
+                    <InputText @bind-Value="Model!.HourlyRate" class="form-control" />
+                    <label>Card number</label>
+                    <InputText @bind-Value="Model!.CreditCardNumber" class="form-control" />
+
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public EventCallback OnCreated { get; set; }
+    public Translator? Model { get; set; } = new Translator();
+    private async Task Submit()
+    {
+
+        await _facade.Create(Model);
+        await OnCreated.InvokeAsync();
+    }
+
+
+
+
+        
+
+    
+}
