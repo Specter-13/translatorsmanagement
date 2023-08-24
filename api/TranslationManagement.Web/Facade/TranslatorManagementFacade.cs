@@ -18,43 +18,37 @@ namespace TranslationManagement.Web.Facade
         }
 
 
-        public async Task<List<Translator>> AllTranslators()
+        public async Task<ICollection<Translator>> AllTranslators()
         {
-            //try
-            //{
+            try
+            {
                 var result = await _translatorManagementClient.AllAllAsync();
-                //if (result.StatusCode == (int)HttpStatusCode.OK)
-                //{
-                //    //return result.
-                //}
-            //}
-            //catch(Exception e)
-            //{
-            //    return new List<Translator>();
-            //}
+                if (result.StatusCode == (int)HttpStatusCode.OK)
+                {
+                    return result.Result;
+                }
+            }
+            catch (Exception e)
+            {
+                return new List<Translator>();
+            }
 
-          
+
             return new List<Translator>();
         }
 
 
-        //public async Task<Translator> GetById(string name)
-        //{
-        //    //try
-        //    //{
-        //    var result = await _translatorManagementClient.GetByNameAsync(name);
-        //    if (result.StatusCode == (int)HttpStatusCode.OK)
-        //    {
-        //        return result.Result.ToList();
-        //    }
-        //    //}
-        //    //catch(Exception e)
-        //    //{
-        //    //    return new List<Translator>();
-        //    //}
+        public async Task Create(Translator translator)
+        {
+            var result = await _translatorManagementClient.Create2Async(translator);
+
+            if (result.StatusCode == (int)HttpStatusCode.OK)
+            {
+                return;
+            }
+        
 
 
-        //    return new List<Translator>();
-        //}
+        }
     }
 }

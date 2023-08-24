@@ -17,17 +17,31 @@ Welcome to your new app.
     }
 }
 
+<button @onclick="async() => await CreateNew()">Create</button>
+
 
 @code
 {
 
 
 
-    public List<Translator> Translators { get; set; }
-            
+    public ICollection<Translator> Translators { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
         Translators = await _facade.AllTranslators();
     }
+
+    private async Task CreateNew()
+    {
+        var x = new Translator
+            {
+                Name = "ahoj",
+                CreditCardNumber = "123"
+            };
+
+        await _facade.Create(x);
+    }
+
 }

@@ -45,6 +45,7 @@ namespace TranslationManagement.Api.Controlers
         }
 
         [HttpPost("Create")]
+        [SwaggerResponse(typeof(Translator))]
         public IActionResult AddTranslator([FromBody] Translator translator)
         {
             var addedTranslator = _translatorRepository.AddTranslator(translator);
@@ -62,17 +63,17 @@ namespace TranslationManagement.Api.Controlers
             _logger.LogInformation("User status update request: " + status + " for user " + id.ToString());
 
 
-            var job = _translatorRepository.GetById(id);
-            if(job == null) 
+            var translator = _translatorRepository.GetById(id);
+            if(translator == null) 
             {
                 return BadRequest();
             }
 
-            job.Status = status;
+            translator.Status = status;
 
-            _translatorRepository.UpdateTranslator(job);
+            _translatorRepository.UpdateTranslator(translator);
 
-            return Ok(job);
+            return Ok(translator);
         }
     }
 }

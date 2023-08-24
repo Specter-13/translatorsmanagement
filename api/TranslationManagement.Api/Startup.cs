@@ -21,16 +21,16 @@ namespace TranslationManagement.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllOrigins",
-            //        builder =>
-            //        {
-            //            builder.AllowAnyHeader()
-            //                .AllowAnyOrigin()
-            //                .AllowAnyMethod();
-            //        });
-            //});
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllOrigins",
+                    builder =>
+                    {
+                        builder.AllowAnyHeader()
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod();
+                    });
+            });
 
             services.AddControllers().AddJsonOptions(options =>
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));;
@@ -53,6 +53,7 @@ namespace TranslationManagement.Api
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TranslationManagement.Api v1"));
 
+            app.UseCors("AllOrigins");
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
