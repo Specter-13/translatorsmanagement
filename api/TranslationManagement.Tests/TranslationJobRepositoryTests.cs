@@ -4,20 +4,23 @@ using TranslationManagement.DAL;
 using TranslationManagement.DAL.Enums;
 using TranslationManagement.DAL.Helpers;
 using TranslationManagement.DAL.Models;
+using TranslationManagement.DAL.Repositories;
 using TranslationManagement.Tests.Setup;
 using Xunit;
 
 namespace TranslationManagement.Tests
 {
-    public class AppDbContextTests : IDisposable
+    public class TranslationJobRepositoryTests : IDisposable
     {
         private readonly AppDbContext _testContext;
-        public AppDbContextTests()
+        private readonly TranslationJobRepository _translationJobRepository;
+
+        public TranslationJobRepositoryTests()
         {
             var setup = new TestDBInMemoryContextSetup("testDb");
             _testContext = setup.CreateInMemoryDbContext();
-            
             setup.PrepareDatabase();
+            _translationJobRepository = new TranslationJobRepository(_testContext);
         }
 
         public void Dispose() => _testContext.Dispose();
@@ -26,28 +29,23 @@ namespace TranslationManagement.Tests
         public void job_created_test_successfull()
         {
             //Arrange
-
             var job = new TranslationJob()
             {
                Id = 1,
                CustomerName = "Test",
-               Status = JobStatus.New,
                OriginalContent = "Test",
                TranslatedContent = "",
                Price = 10
   
             };
             //Act
-            var createdJob = _testContext.TranslationJobs.Add(job);
-            _testContext.SaveChanges();
-            var isCreated = _testContext.TranslationJobs.FirstOrDefault(x => x.Id == job.Id);
+            var createdJob = _translationJobRepository.Create(job);
+            var isCreated = _translationJobRepository.GetById(job.Id);
 
             //Assert
             Assert.NotNull(createdJob);
             Assert.NotNull(isCreated);
-
-            
-
+            Assert.Equal(JobStatus.New, createdJob.Status);
             
         }
     }

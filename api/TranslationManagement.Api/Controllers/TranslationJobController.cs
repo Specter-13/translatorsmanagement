@@ -33,7 +33,7 @@ namespace TranslationManagement.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("All")]
         public IActionResult GetJobs()
         {
             return Ok(_translationJobRepository.GetJobs());
@@ -41,8 +41,8 @@ namespace TranslationManagement.Api.Controllers
 
         
 
-        [HttpPost]
-        public IActionResult CreateJob(TranslationJob job)
+        [HttpPost("Create")]
+        public IActionResult CreateJob([FromBody] TranslationJob job)
         {
 
             var createdJob = _translationJobRepository.Create(job);
@@ -54,7 +54,7 @@ namespace TranslationManagement.Api.Controllers
             return Ok(createdJob);
         }
 
-        [HttpPost]
+        [HttpPost("CreateWithFile")]
         public IActionResult CreateJobWithFile(IFormFile file, string customer)
         {
             var readJob = _jobReader.ExecuteRead(file, customer);
@@ -71,7 +71,7 @@ namespace TranslationManagement.Api.Controllers
             return Ok(createdJob);
         }
 
-        [HttpPut]
+        [HttpPut("UpdateStatus")]
         public IActionResult UpdateJobStatus(int jobId, int translatorId, JobStatus newStatus)
         {
             _logger.LogInformation("Job status update request received: " + newStatus + " for job " + jobId.ToString() + " by translator " + translatorId);

@@ -21,6 +21,17 @@ namespace TranslationManagement.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllOrigins",
+            //        builder =>
+            //        {
+            //            builder.AllowAnyHeader()
+            //                .AllowAnyOrigin()
+            //                .AllowAnyMethod();
+            //        });
+            //});
+
             services.AddControllers().AddJsonOptions(options =>
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));;
             services.AddSwaggerGen(c =>

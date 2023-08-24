@@ -26,4 +26,10 @@
     <ProjectReference Include="..\TranslationManagement.DAL\TranslationManagement.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestFiles\job.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
