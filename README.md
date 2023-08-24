@@ -5,7 +5,7 @@ Simple API with simple Blazor webassembly frontend
 ## Requirements
 
 - Visual Studio 2022
-- .net 5.0 sdk (for API, I don't want to have problems because of migrating to newer sdk)
+- .net 5.0 sdk (for API)
 - .net 7.0 sdk (for Blazor frontend)
 
 
@@ -63,4 +63,4 @@ A lot of stuff can be still improved, but now it should be much better than at b
 
 # notes
 
-I was considering doing UI in React, however it would take a lot of time, as I'm still in learning phase, so I've chose faster approach  
+I was considering doing UI in React, however it would take a lot of time, as I'm still in learning phase, so I've chosen faster approach  
