@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NSwag.Annotations;
 using TranslationManagement.Api.Controlers;
 using TranslationManagement.Api.JobFileReader;
 using TranslationManagement.DAL;
@@ -34,7 +36,8 @@ namespace TranslationManagement.Api.Controllers
         }
 
         [HttpGet("All")]
-        public IActionResult GetJobs()
+        [SwaggerResponse(typeof(ICollection<TranslationJob>))]
+        public ActionResult<ICollection<TranslationJob>> GetJobs()
         {
             return Ok(_translationJobRepository.GetJobs());
         }
@@ -51,7 +54,7 @@ namespace TranslationManagement.Api.Controllers
                SendNotification(createdJob.Id);
             }
 
-            return Ok(createdJob);
+            return Ok();
         }
 
         [HttpPost("CreateWithFile")]
@@ -68,7 +71,7 @@ namespace TranslationManagement.Api.Controllers
                 SendNotification(createdJob.Id);
             }
 
-            return Ok(createdJob);
+            return Ok();
         }
 
         [HttpPut("UpdateStatus")]

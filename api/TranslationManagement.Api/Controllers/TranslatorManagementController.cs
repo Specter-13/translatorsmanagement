@@ -39,13 +39,13 @@ namespace TranslationManagement.Api.Controlers
         }
 
         [HttpGet("GetByName")]
+        [SwaggerResponse(typeof(ICollection<Translator>))]
         public IActionResult GetTranslatorsByName(string name)
         {
             return Ok(_translatorRepository.GetTranslatorsByName(name));
         }
 
         [HttpPost("Create")]
-        [SwaggerResponse(typeof(Translator))]
         public IActionResult AddTranslator([FromBody] Translator translator)
         {
             var addedTranslator = _translatorRepository.AddTranslator(translator);
@@ -54,7 +54,7 @@ namespace TranslationManagement.Api.Controlers
                 return BadRequest();
             }
 
-            return Ok(addedTranslator);
+            return Ok();
         }
         
         [HttpPut("UpdateStatus")]
@@ -73,7 +73,7 @@ namespace TranslationManagement.Api.Controlers
 
             _translatorRepository.UpdateTranslator(translator);
 
-            return Ok(translator);
+            return Ok();
         }
     }
 }

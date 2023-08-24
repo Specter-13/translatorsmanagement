@@ -22,7 +22,7 @@ namespace TranslationManagement.Web.Facade
         {
             try
             {
-                var result = await _translatorManagementClient.AllAllAsync();
+                var result = await _translatorManagementClient.All2Async();
                 if (result.StatusCode == (int)HttpStatusCode.OK)
                 {
                     return result.Result;
@@ -47,7 +47,17 @@ namespace TranslationManagement.Web.Facade
                 return;
             }
         
+        }
 
+
+        public async Task UpdateStatus(int id, TranslatorStatus translatorStatus)
+        {
+            var result = await _translatorManagementClient.UpdateStatus2Async(id, translatorStatus);
+
+            if (result.StatusCode == (int)HttpStatusCode.OK)
+            {
+                return;
+            }
 
         }
     }

@@ -24,12 +24,12 @@ namespace TranslationManagement.Client
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> AllAsync();
+        System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<TranslationJob>>> AllAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> AllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<TranslationJob>>> AllAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -89,7 +89,7 @@ namespace TranslationManagement.Client
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> AllAsync()
+        public virtual System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<TranslationJob>>> AllAsync()
         {
             return AllAsync(System.Threading.CancellationToken.None);
         }
@@ -97,7 +97,7 @@ namespace TranslationManagement.Client
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> AllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<TranslationJob>>> AllAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append("api/jobs/GetJobs/All");
@@ -109,6 +109,7 @@ namespace TranslationManagement.Client
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -133,7 +134,12 @@ namespace TranslationManagement.Client
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return new FileResponse(status_, headers_);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<TranslationJob>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return new FileResponse<System.Collections.Generic.ICollection<TranslationJob>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -503,12 +509,12 @@ namespace TranslationManagement.Client
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<Translator>>> AllAllAsync();
+        System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<Translator>>> All2Async();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<Translator>>> AllAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<Translator>>> All2Async(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -568,15 +574,15 @@ namespace TranslationManagement.Client
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<Translator>>> AllAllAsync()
+        public virtual System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<Translator>>> All2Async()
         {
-            return AllAllAsync(System.Threading.CancellationToken.None);
+            return All2Async(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<Translator>>> AllAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse<System.Collections.Generic.ICollection<Translator>>> All2Async(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append("api/TranslatorsManagement/GetTranslators/All");

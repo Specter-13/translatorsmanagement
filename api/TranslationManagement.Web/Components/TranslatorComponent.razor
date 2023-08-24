@@ -1,0 +1,57 @@
+﻿@using TranslationManagement.Client;
+@using TranslationManagement.Web.Facade;
+
+@inject TranslatorManagementFacade _facade;
+
+<h3>TranslatorComponent</h3>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Hourly Rate</th>
+            <th scope="col">Status</th>
+            <th scope="col">CardNumber</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach(var translator in _translators)
+        {
+        <tr>
+            <th scope="row">@translator.Id</th>
+             <td>@translator.Name</td>
+             <td>@translator.HourlyRate</td>
+             <td>@translator.Status.ToString()</td>
+             <td>@translator.CreditCardNumber</td>
+        </tr>
+        }
+     
+    </tbody>
+</table>
+
+<button @onclick="async() => await CreateNew()">Create new</button>
+
+@code {
+
+
+    private ICollection<Translator> _translators { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        _translators = await _facade.AllTranslators();
+
+    }
+
+    private async Task CreateNew()
+    {
+        var x = new Translator
+            {
+                Name = "ahoj",
+                CreditCardNumber = "123"
+            };
+
+        await _facade.Create(x);
+    }
+}

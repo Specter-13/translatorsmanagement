@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TranslationManagement.DAL",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TranslationManagement.Tests", "TranslationManagement.Tests\TranslationManagement.Tests.csproj", "{D6509641-DA85-4972-AD96-7BECDDB6EAC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranslationManagement.Web", "TranslationManagement.Web\TranslationManagement.Web.csproj", "{FBCFE0C8-0004-447F-8059-6E51086C51EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TranslationManagement.Web", "TranslationManagement.Web\TranslationManagement.Web.csproj", "{FBCFE0C8-0004-447F-8059-6E51086C51EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
